@@ -20,7 +20,7 @@ export class AuthorService {
    * @param {typeof AuthorModel} authorModel
    */
   constructor(authorModel) {
-    this.userModel = authorModel;
+    this.authorModel = authorModel;
   }
   /**
    * Retorna un arreglo de todos los autores
@@ -28,7 +28,7 @@ export class AuthorService {
    * @returns {Promise<AuthorType[]>}
    */
   async findAll() {
-    return this.userModel.find();
+    return this.authorModel.find();
   }
   /**
    * Encuentra un autor por ID
@@ -38,7 +38,7 @@ export class AuthorService {
    * o null de no existir
    */
   async findById(id) {
-    return this.userModel.findById(id);
+    return this.authorModel.findById(id);
   }
 
   /**
@@ -80,7 +80,7 @@ export class AuthorService {
       return null;
     }
 
-    const created = await this.userModel.create({
+    const created = await this.authorModel.create({
       name,
       surname,
       bio

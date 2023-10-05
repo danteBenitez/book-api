@@ -52,7 +52,7 @@ export class GenreService {
    * @returns {Promise<GenreType | null>} El género creado
    */
   async create({ description }) {
-    const exists = await this.genreModel.find({ description });
+    const exists = await this.genreModel.findOne({ description }).exec();
     if (exists) {
       return null;
     }

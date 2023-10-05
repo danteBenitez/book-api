@@ -1,13 +1,13 @@
 // @ts-check
-import { bookService } from "../services/book.service.js";
+import { genreService } from "../services/genre.service.js";
 
-export async function getAllBooks(_req, res) {
+export async function getAllGenres(_req, res) {
     try {
-        const found = await bookService.findAll();
+        const found = await genreService.findAll();
 
         if (found.length == 0) {
             return res.status(404).json({
-                message: 'No hay libros que mostrar'
+                message: 'No hay géneros que mostrar'
             })
         }
 
@@ -21,15 +21,15 @@ export async function getAllBooks(_req, res) {
     }
 }
 
-export async function getBook(req, res) {
-    const { bookId } = req.params;
+export async function getGenre(req, res) {
+    const { genreId } = req.params;
 
     try {
-        const found = await bookService.findById(bookId);
+        const found = await genreService.findById(genreId);
 
         if (!found) {
             return res.status(404).json({
-                message: 'No se encontró el libro'
+                message: 'No se encontró el género'
             })
         }
 
@@ -44,13 +44,13 @@ export async function getBook(req, res) {
 
 }
 
-export async function createBook(req, res) {
+export async function createGenre(req, res) {
     try {
-        const created = await bookService.create(req.body);
+        const created = await genreService.create(req.body);
 
         res.status(201).json({
-            message: 'Libro creado exitosamente',
-            user: created
+            message: 'Género creado exitosamente',
+            genre: created
         });
 
     } catch(err) {
@@ -59,21 +59,21 @@ export async function createBook(req, res) {
     }
 }
 
-export async function updateBook(req, res) {
-    const { bookId } = req.params;
+export async function updateGenre(req, res) {
+    const { genreId } = req.params;
 
     try {
-        const found = await bookService.update(bookId, req.body);
+        const found = await genreService.update(genreId, req.body);
 
         if (!found) {
             return res.status(404).json({
-                message: 'Libro no encontrado'
+                message: 'Género no encontrado'
             })
         }
 
         res.status(200).json({
-            message: 'Libro actualizado correctamente',
-            user: found
+            message: 'Género actualizado correctamente',
+            genre: found
         });
 
     } catch(err) {
@@ -82,22 +82,22 @@ export async function updateBook(req, res) {
     }
 }
 
-export async function deleteBook(req, res) {
+export async function deleteGenre(req, res) {
     const { bookId } = req.params;
 
 
     try {
-        const found = await bookService.delete(bookId);
+        const found = await genreService.delete(bookId);
 
         if (!found) {
             return res.status(404).json({
-                message: 'Libro no encontrado'
+                message: 'Género no encontrado'
             })
         }
 
         res.status(200).json({
-            message: 'Libro borrado correctamente',
-            user: found
+            message: 'Género borrado correctamente',
+            genre: found
         })
 
     } catch(err) {

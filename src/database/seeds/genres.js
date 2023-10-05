@@ -1,4 +1,4 @@
-import { genreService } from "../../services/genre.service"
+import { genreService } from "../../services/genre.service.js"
 
 const GENRES = [
     "Misterio",
@@ -9,6 +9,7 @@ const GENRES = [
 export async function createDefaultGenres() {
     try {
         for (const genre of GENRES) {
+            console.log("Creando género: ", genre);
             await genreService.create({
                 description: genre
             });

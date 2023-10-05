@@ -13,7 +13,7 @@ const bookSchema = new Schema({
         type: Number,
         required: true
     },
-    coverImageURL: {
+    coverImagePath: {
         type: String,
         required: true
     },

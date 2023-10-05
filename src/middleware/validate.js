@@ -1,6 +1,6 @@
 import { validationResult } from "express-validator"
 
-export function validate(validations) {
+export function validate(...validations) {
     return async (req, res, next) => {
         for (const schema of validations) {
             await schema.run(req);

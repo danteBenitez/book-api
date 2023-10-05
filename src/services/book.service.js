@@ -70,7 +70,7 @@ export class BookService {
    *    title: string,
    *    genre: number,
    *    publicationYear: number,
-   *    coverImageURL: string,
+   *    coverImagePath: string,
    *    authorId: number,
    * }} bookData - Los datos del libro a crear
    * @returns {Promise<BookType | null>} El libro creado
@@ -99,7 +99,7 @@ export class BookService {
    *    title: string,
    *    genre: number,
    *    publicationYear: number,
-   *    coverImageURL: string,
+   *    coverImagePath: string,
    *    authorId: number,
    * }} bookData Los datos del libro a crear
    * @returns {Promise<BookType | null>} El libro actualizado
