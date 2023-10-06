@@ -1,4 +1,5 @@
 import {  Schema, model } from 'mongoose';
+import autopopulate from 'mongoose-autopopulate';
 
 const bookSchema = new Schema({
     title: {
@@ -19,11 +20,14 @@ const bookSchema = new Schema({
     },
     authorId: {
         type: Schema.Types.ObjectId,
-        ref: 'Author'
+        ref: 'Author',
+        autopopulate: true
     }
 }, {
     timestamps: true,
     versionKey: false
 });
+
+bookSchema.plugin(autopopulate);
 
 export const BookModel = model('Book', bookSchema);

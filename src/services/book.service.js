@@ -80,11 +80,12 @@ export class BookService {
    * @returns {Promise<BookType | null>} El libro creado
    */
   async create({ authorId, ...book }, cover) {
-    const exists = await this.authorService.findById(authorId);
+    const author = await this.authorService.findById(authorId);
 
-    if (!exists) {
+    if (!author) {
       return null;
     }
+
 
     /** @type {Promise<BookType | null>} */
     const bookPromise = new Promise((resolve) => {
@@ -99,7 +100,8 @@ export class BookService {
           coverImagePath: cover.name,
           ...book,
         });
-
+        const newAuthor = await this.authorService.addBookIdToAuthor(author, created);
+        created.author = newAuthor;
         resolve(created);
       });
     });
@@ -124,7 +126,6 @@ export class BookService {
    */
   async update(bookId, bookData, cover) {
     let existingBook = await this.findById(bookId);
-
 
     if (!existingBook) {
       return null;
@@ -173,6 +174,7 @@ export class BookService {
     await existingBook.deleteOne();
     return existingBook;
   }
+
 }
 
 export const bookService = new BookService(BookModel, authorServiceInstance);

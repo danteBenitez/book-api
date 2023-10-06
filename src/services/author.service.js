@@ -125,6 +125,20 @@ export class AuthorService {
     await existingAuthor.deleteOne();
     return existingAuthor;
   }
+
+  /**
+   * Función que actualiza un autor registrando un libro
+   * a su nombre.
+   * 
+   * @param {AuthorType} author
+   * @param {import('mongoose').Types.ObjectId} bookObjectId
+   * @returns {Promise<AuthorType>} El autor actualizado
+   */
+  async addBookIdToAuthor(author, bookObjectId) {
+    author.books.push(bookObjectId);
+    await author.save();
+    return author;
+  }
 }
 
 export const authorService = new AuthorService(AuthorModel);
