@@ -5,7 +5,8 @@ import {
     getAllGenres,
     getGenre,
     updateGenre,
-    deleteGenre
+    deleteGenre,
+    getBookCountByGenre
 } from "../controllers/genre.controllers.js";
 import { validate } from "../middleware/validate.js";
 import {
@@ -27,5 +28,7 @@ router.post("/", validate(createGenreSchema), createGenre);
 router.put("/:authorId", validate(idParam, updateGenreSchema), updateGenre);
 
 router.delete("/:authorId", validate(idParam), deleteGenre);
+
+router.get('/books/count', getBookCountByGenre);
 
 export default router;

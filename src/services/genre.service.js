@@ -1,10 +1,9 @@
 // @ts-check
 import { GenreModel } from "../models/Genre.js";
 
-
 /**
  * Instance del modelo `Author`
- * @typedef {InstanceType<typeof GenreModel>} GenreType 
+ * @typedef {InstanceType<typeof GenreModel>} GenreType
  */
 /**
  * Servicio que abstrae las operaciones con los datos del género
@@ -25,7 +24,7 @@ export class GenreService {
 
   /**
    * Retorna un arreglo de todos los géneros
-   * 
+   *
    * @returns {Promise<GenreType[]>}
    */
   async findAll() {
@@ -57,7 +56,7 @@ export class GenreService {
       return null;
     }
     const created = await this.genreModel.create({
-        description
+      description,
     });
 
     return created;
@@ -67,7 +66,7 @@ export class GenreService {
    * Actualiza el género especificado
    * con los atributos pasados.
    *
-   * @param {number} genreId 
+   * @param {number} genreId
    * @param {{
    *    description: string
    * }} genreData Los datos del género a crear
@@ -84,11 +83,10 @@ export class GenreService {
     return existingGenre;
   }
 
-
   /**
    * Elimina el género con el ID especificado
    *
-   * @param {number} genreId 
+   * @param {number} genreId
    * @returns {Promise<GenreType | null>} El género eliminado
    */
   async delete(genreId) {
@@ -98,6 +96,31 @@ export class GenreService {
     }
     await existingGenre.deleteOne();
     return existingGenre;
+  }
+
+  /**
+   * Retorna la cantidad de libros por género
+   * @returns {Promise<any[]>}
+   */
+  async getBookCount() {
+    const result = await this.genreModel.aggregate([
+      {
+        $lookup: {
+          from: "books",
+          localField: "_id",
+          foreignField: "genreId",
+          as: "books",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          bookCount: { $size: "$books" },
+          description: 1,
+        },
+      },
+    ]);
+    return result;
   }
 }
 

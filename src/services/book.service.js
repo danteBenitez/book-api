@@ -59,7 +59,7 @@ export class BookService {
    * Encuentra un libro por ID
    *
    * @param {number} id
-   * @returns {Promise< BookType | null>}  El libro encontrado
+   * @returns {Promise<BookType | null>}  El libro encontrado
    * o null de no existir
    */
   async findById(id) {
@@ -85,7 +85,6 @@ export class BookService {
     if (!author) {
       return null;
     }
-
 
     /** @type {Promise<BookType | null>} */
     const bookPromise = new Promise((resolve) => {
