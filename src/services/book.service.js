@@ -176,7 +176,6 @@ export class BookService {
     await existingBook.deleteOne();
     return existingBook;
   }
-
 }
 
 export const bookService = new BookService(BookModel, authorServiceInstance);

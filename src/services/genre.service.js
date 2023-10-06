@@ -99,6 +99,50 @@ export class GenreService {
     await existingGenre.deleteOne();
     return existingGenre;
   }
+
+  /**
+   * Calcula la cantidad de libros por cada género
+   * 
+   * @returns {Promise<(object & { bookCount: number })[]>}
+   */
+  async getBookCount() {
+    return this.genreModel.aggregate([
+      {
+        $lookup: {
+          from: 'books',
+          foreignField: 'genreId',
+          localField: '_id',
+          as: 'books'
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          description: 1,
+          bookCount: { $size: "$books" }
+        }
+      }
+    ]);
+  }
+
+  /**
+   * Retorna un arreglo de objetos con información del género
+   * y los libros que pertenecen a él
+   * 
+   * @returns {Promise<unknown[]>}
+   */
+  async getBooksByGenre() {
+    return this.genreModel.aggregate([
+      {
+        $lookup: {
+          from: 'books',
+          localField: '_id',
+          foreignField: 'genreId',
+          as: 'books'
+        }
+      }
+    ])
+  }
 }
 
 export const genreService = new GenreService(GenreModel);

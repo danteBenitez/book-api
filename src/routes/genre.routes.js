@@ -5,7 +5,9 @@ import {
     getAllGenres,
     getGenre,
     updateGenre,
-    deleteGenre
+    deleteGenre,
+    getBookCount,
+    getBooksByGenre
 } from "../controllers/genre.controllers.js";
 import { validate } from "../middleware/validate.js";
 import {
@@ -20,12 +22,17 @@ const idParam = param("authorId").isValidObjectId();
 
 router.get("/", getAllGenres);
 
-router.get("/:authorId", validate(idParam), getGenre);
+router.get('/books/count', getBookCount);
+
+router.get('/books', getBooksByGenre);
+
+router.get("/:genreId", validate(idParam), getGenre);
 
 router.post("/", validate(createGenreSchema), createGenre);
 
-router.put("/:authorId", validate(idParam, updateGenreSchema), updateGenre);
+router.put("/:genreId", validate(idParam, updateGenreSchema), updateGenre);
 
-router.delete("/:authorId", validate(idParam), deleteGenre);
+router.delete("/:genreId", validate(idParam), deleteGenre);
+
 
 export default router;

@@ -83,11 +83,11 @@ export async function updateGenre(req, res) {
 }
 
 export async function deleteGenre(req, res) {
-    const { bookId } = req.params;
+    const { genreId } = req.params;
 
 
     try {
-        const found = await genreService.delete(bookId);
+        const found = await genreService.delete(genreId);
 
         if (!found) {
             return res.status(404).json({
@@ -101,6 +101,46 @@ export async function deleteGenre(req, res) {
         })
 
     } catch(err) {
-        res.sendstatus(500);
+        res.sendStatus(500);
+    }
+}
+
+export async function getBookCount(_req, res) {
+    try {
+        const found = await genreService.getBookCount();
+
+        if (found.length == 0) {
+            return res.status(404).json({
+                message: 'Ningún genero encontrado'
+            })
+        }
+
+        res.status(200).json({
+            genre: found
+        });
+
+    } catch(err) {
+        console.error(err);
+        res.sendStatus(500);
+    }
+}
+
+export async function getBooksByGenre(_req, res) {
+    try {
+        const found = await genreService.getBooksByGenre();
+
+        if (found.length == 0) {
+            return res.status(404).json({
+                message: 'Géneros no encontrados'
+            })
+        }
+
+        res.status(200).json({
+            genres: found
+        });
+
+    } catch(err) {
+        console.error(err);
+        res.sendStatus(500);
     }
 }
