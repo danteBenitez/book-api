@@ -1,4 +1,3 @@
-// @ts-check
 import { bookService } from "../services/book.service.js";
 
 export async function getAllBooks(_req, res) {
@@ -107,6 +106,7 @@ export async function deleteBook(req, res) {
         })
 
     } catch(err) {
-        res.sendstatus(500);
+        console.log(err);
+        res.sendStatus(500);
     }
 }

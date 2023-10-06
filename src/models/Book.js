@@ -21,7 +21,9 @@ const bookSchema = new Schema({
     authorId: {
         type: Schema.Types.ObjectId,
         ref: 'Author',
-        autopopulate: true
+        autopopulate: {
+            maxDepth: 1
+        }
     }
 }, {
     timestamps: true,

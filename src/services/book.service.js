@@ -170,7 +170,9 @@ export class BookService {
     } catch(err) {
       console.error("Error al eliminar archivo: ", err);
     }
+    const author = await this.authorService.findById(existingBook.authorId);
 
+    await this.authorService.removeBookFromAuthor(author, bookId);
     await existingBook.deleteOne();
     return existingBook;
   }
