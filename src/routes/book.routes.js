@@ -9,11 +9,13 @@ import {
 } from "../controllers/book.controllers.js";
 import { validate } from "../middleware/validate.js";
 import { createBookSchema, updateBookSchema } from "../schema/book.schema.js";
-import { hasValidObjectId } from "../schema/objectId.schema.js";
+import {param} from '../middleware/validators.js';
+import { checkForFilenames } from "../middleware/validate-files.js";
 
 const router = Router();
 
-const idParam = hasValidObjectId('bookId');
+const idParam = param('bookId').isValidObjectId();
+const hasCover = checkForFilenames(['cover'], 'Debe enviar una portada de libro');
 
 router.get("/", getAllBooks);
 
@@ -24,15 +26,17 @@ router.get("/:bookId",
 
 router.post("/", 
     validate(createBookSchema), 
+    hasCover,
     createBook
 );
 
 router.put("/:bookId", 
     validate(idParam, updateBookSchema), 
+    hasCover,
     updateBook
 );
 
-router.delete("/:bookdId", 
+router.delete("/:bookId", 
     validate(idParam), 
     deleteBook
 );

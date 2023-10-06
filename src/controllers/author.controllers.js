@@ -47,7 +47,6 @@ export async function getAuthor(req, res) {
 export async function createAuthor(req, res) {
     try {
         const created = await authorService.create(req.body);
-
         res.status(201).json({
             message: 'Autor creado exitosamente',
             author: created

@@ -1,6 +1,9 @@
-// @ts-check
+import path from "path";
 import { BookModel } from "../models/Book.js";
 import { authorService as authorServiceInstance } from "./author.service.js";
+import { rm } from "fs/promises";
+
+const UPLOAD_PATH = path.resolve("./uploads");
 
 /**
  * Instance del modelo `Author`
@@ -9,7 +12,7 @@ import { authorService as authorServiceInstance } from "./author.service.js";
 
 /**
  * Servicio que abstrae las operaciones con los datos de los libros
- * de los modelos. Permite obtener, crear, borrar y eliminar libros 
+ * de los modelos. Permite obtener, crear, borrar y eliminar libros
  */
 export class BookService {
   /** @type {typeof BookModel} */
@@ -70,24 +73,37 @@ export class BookService {
    *    title: string,
    *    genre: number,
    *    publicationYear: number,
-   *    coverImagePath: string,
    *    authorId: number,
    * }} bookData - Los datos del libro a crear
+   * @param {import('express-fileupload').UploadedFile} cover
+   * El archivo de la portada del libro
    * @returns {Promise<BookType | null>} El libro creado
    */
-  async create({ authorId, ...book }) {
+  async create({ authorId, ...book }, cover) {
     const exists = await this.authorService.findById(authorId);
 
     if (!exists) {
       return null;
     }
 
-    const created = await this.bookModel.create({
-      authorId,
-      ...book,
-    });
+    /** @type {Promise<BookType | null>} */
+    const bookPromise = new Promise((resolve) => {
+      cover.mv(path.join(UPLOAD_PATH, cover.name), async (err) => {
+          if (err)  {
+            console.error("Ocurrió un error al subir el archivo: ", err);
+            resolve(null);
+          }
 
-    return created;
+        const created = await this.bookModel.create({
+          authorId,
+          coverImagePath: cover.name,
+          ...book,
+        });
+
+        resolve(created);
+      });
+    });
+    return bookPromise;
   }
 
   /**
@@ -99,37 +115,59 @@ export class BookService {
    *    title: string,
    *    genre: number,
    *    publicationYear: number,
-   *    coverImagePath: string,
    *    authorId: number,
    * }} bookData Los datos del libro a crear
+   * @param {import('express-fileupload').UploadedFile} cover
+   * El archivo de la portada del libro
    * @returns {Promise<BookType | null>} El libro actualizado
    * o un null si algo salió mal
    */
-  async update(bookId, bookData) {
+  async update(bookId, bookData, cover) {
     let existingBook = await this.findById(bookId);
 
-    if (!existingBook) {
-      return null;
-    }
+    /** @type {Promise<BookType | null>} */
+    const updatePromise = new Promise((resolve) => {
+      cover.mv(path.join(UPLOAD_PATH, cover.name), async (err) => {
+          if (err)  {
+            console.error("Ocurrió un error al subir el archivo: ", err);
+            resolve(null);
+          }
+          if (!existingBook) {
+            resolve(null);
+          }
 
-    existingBook = Object.assign(existingBook, bookData);
-    await existingBook.save();
+          existingBook = Object.assign(existingBook, { 
+            ...bookData,
+            coverImagePath: cover.name
+          });
+          await existingBook.save();
 
-    return existingBook;
+        resolve(existingBook);
+      });
+    });
+    return updatePromise;
   }
 
   /**
    * Elimina el libro con el ID especificado
    *
    * @param {number} bookId
-   * @returns {Promise<BookType | null>} El libro elimina 
+   * @returns {Promise<BookType | null>} El libro elimina
    * o un null si algo salió mal
    */
   async delete(bookId) {
     let existingBook = await this.findById(bookId);
+
     if (!existingBook) {
       return null;
     }
+
+    try {
+      await rm(path.join(UPLOAD_PATH, existingBook.coverImagePath));
+    } catch(err) {
+      console.error("Error al eliminar archivo: ", err);
+    }
+
     await existingBook.deleteOne();
     return existingBook;
   }

@@ -74,18 +74,12 @@ export class AuthorService {
    * si hubo conflicts
    */
   async create({ name, surname, bio }) {
-    const exists = await this.exists({ name, surname });
-
-    if (exists) {
-      return null;
-    }
-
     const created = await this.authorModel.create({
       name,
       surname,
       bio
     });
-
+    console.log(created);
     return created;
   }
 

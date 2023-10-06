@@ -45,12 +45,16 @@ export async function getBook(req, res) {
 }
 
 export async function createBook(req, res) {
+
+    const cover = req.files.cover;
     try {
-        const created = await bookService.create(req.body);
+        const created = await bookService.create({ 
+            ...req.body,
+        }, cover);
 
         res.status(201).json({
             message: 'Libro creado exitosamente',
-            user: created
+            book: created
         });
 
     } catch(err) {
@@ -61,9 +65,11 @@ export async function createBook(req, res) {
 
 export async function updateBook(req, res) {
     const { bookId } = req.params;
+    /** @type {import('express-fileupload').UploadedFile} */
+    const cover = req.files.cover;
 
     try {
-        const found = await bookService.update(bookId, req.body);
+        const found = await bookService.update(bookId, req.body, cover);
 
         if (!found) {
             return res.status(404).json({
@@ -73,7 +79,7 @@ export async function updateBook(req, res) {
 
         res.status(200).json({
             message: 'Libro actualizado correctamente',
-            user: found
+            book: found
         });
 
     } catch(err) {
@@ -97,7 +103,7 @@ export async function deleteBook(req, res) {
 
         res.status(200).json({
             message: 'Libro borrado correctamente',
-            user: found
+            book: found
         })
 
     } catch(err) {

@@ -12,11 +12,11 @@ import {
   createGenreSchema,
   updateGenreSchema,
 } from "../schema/genre.schema.js";
-import { hasValidObjectId } from "../schema/objectId.schema.js";
+import { param } from "../middleware/validators.js";
 
 const router = Router();
 
-const idParam = hasValidObjectId("authorId");
+const idParam = param("authorId").isValidObjectId();
 
 router.get("/", getAllGenres);
 
