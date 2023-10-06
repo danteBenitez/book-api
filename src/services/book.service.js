@@ -125,14 +125,16 @@ export class BookService {
   async update(bookId, bookData, cover) {
     let existingBook = await this.findById(bookId);
 
+
+    if (!existingBook) {
+      return null;
+    }
+    await rm(path.join(UPLOAD_PATH, existingBook.coverImagePath));
     /** @type {Promise<BookType | null>} */
     const updatePromise = new Promise((resolve) => {
       cover.mv(path.join(UPLOAD_PATH, cover.name), async (err) => {
           if (err)  {
             console.error("Ocurrió un error al subir el archivo: ", err);
-            resolve(null);
-          }
-          if (!existingBook) {
             resolve(null);
           }
 
