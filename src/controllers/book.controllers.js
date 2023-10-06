@@ -3,7 +3,6 @@ import { bookService } from "../services/book.service.js";
 export async function getAllBooks(_req, res) {
     try {
         const found = await bookService.findAll();
-        console.log(found);
         if (found.length == 0) {
             return res.status(404).json({
                 message: 'No hay libros que mostrar'

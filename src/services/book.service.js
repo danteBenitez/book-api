@@ -101,7 +101,7 @@ export class BookService {
           ...book,
         });
         const newAuthor = await this.authorService.addBookIdToAuthor(author, created);
-        created.author = newAuthor;
+        created.authorId = newAuthor;
         resolve(created);
       });
     });

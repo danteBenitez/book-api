@@ -135,6 +135,7 @@ export class AuthorService {
    * @returns {Promise<AuthorType>} El autor actualizado
    */
   async addBookIdToAuthor(author, bookObjectId) {
+    console.log("Adding ID to author");
     author.books.push(bookObjectId);
     await author.save();
     return author;
