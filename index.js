@@ -12,6 +12,7 @@ import { logRequests } from "./src/middleware/logging.js";
 import { handleErrors } from "./src/middleware/handleErrors.js";
 
 import fileUpload from "express-fileupload";
+import path from "path";
 
 const app = express();
 
@@ -19,9 +20,13 @@ const app = express();
 app.use(logRequests);
 
 // Middleware de librerías
+app.use(express.static(path.join('./public')));
+app.use('/uploads', express.static(path.join('./uploads')))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(helmet());
+app.use(helmet({
+  xContentTypeOptions: false
+}));
 app.use(cors());
 app.use(
   fileUpload({

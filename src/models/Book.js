@@ -8,7 +8,8 @@ const bookSchema = new Schema({
     },
     genreId: {
         type: Schema.Types.ObjectId,
-        ref: 'Genre'
+        ref: 'Genre',
+        autopopulate: true
     },
     publicationYear: {
         type: Number,
