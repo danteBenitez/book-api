@@ -32,7 +32,10 @@ export function checkForFilenames(filenames, errorMessage) {
             next();
         } catch(err) {
             res.status(400).json({
-                message: err.message
+                errors: [{
+                    path: filenames,
+                    msg: errorMessage
+                }]
             })
         }
 

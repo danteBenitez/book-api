@@ -28,6 +28,10 @@
     color: var(--clr-brand-800);
 }
 
+.genre-section {
+    width: 100%;
+}
+
 .presentation-hero .banner {
     padding-block: 4rem;
     padding-inline: 2rem;
@@ -192,6 +196,16 @@
     font-weight: 600;
 }
 
+.genre-section {
+    width: 100%;
+
+}
+
+.genre-section h2 {
+    font-size: 2.7rem;
+    margin-block: 1.1rem;
+}
+
 .filter {
     outline: none;
     border: none;
@@ -226,7 +240,20 @@
     text-overflow: ellipsis;
 }
 
+.author-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.author-container > * {
+    flex: 1;
+    flex-shrink: 0;
+    min-height: 5rem;
+}
+
 .author {
+    max-width: 30%;
     background-color: var(--clr-secondary-200);
     transition: all 150ms ease-out;
 }

@@ -33,49 +33,70 @@
         <article class="presentation-hero d-flex justify-content-center">
             <section class="banner w-100">
                 <h1 class="display-1 fw-bold text-white banner-title">
-                    Crea un autor
+                    Crea un libro
                 </h1>
-                <span class="banner-subtitle lead">Registra un autor para compartir sus obras</span>
+                <span class="banner-subtitle lead">Registra un libro para compartirlo con la comunidad</span>
             </section>
         </article>
         <nav class="d-flex justify-content-center py-4">
             <ul class="nav nav-pill-custom">
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/index.html">Todos los libros</a>
+                    <a class="nav-link active" aria-current="page" href="/index.html">Todos los libros</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="/authors.html">Autores</a>
+                    <a class="nav-link" href="/authors.html">Autores</a>
                 </li>
             </ul>
         </nav>
         <section class="form-container mx-auto">
             <div class="col form-box border-2 border shadow-lg">
                 <h2 class="mb-3">Agregar un libro</h2>
-                <form class="needs-validation" novalidate="" method="post" enctype="multipart/form-data" action="/api/books">
+                <form class="needs-validation" id="book-form" enctype="multipart/form-data">
                     <div class="row g-3">
                         <div class="col-sm-6 mb-2">
-                            <label for="name" class="form-label">Nombre: </label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="John" required="">
+                            <label for="title" class="form-label">Título: </label>
+                            <input type="text" class="form-control" id="title" name="title" placeholder="Una historia semi-interesante" required="">
                             <div class="invalid-feedback">
-                                Debe proveer el nombre del autor
+                                Todo libro debe tener un título
                             </div>
                         </div>
 
                         <div class="col-md-6 mb-2">
-                            <label for="surname" class="form-label">Apellido: </label>
-                            <input type="text" class="form-control" id="surname" name="surname" required="" placeholder="Doe">
+                            <label for="authorId" class="form-label">Autor: </label>
+                            <select class="form-select" id="authorId" name="authorId" required="">
+                                <option value="">Elija una opción...</option>
+                            </select>
                             <div class="invalid-feedback">
-                                Debe proveer el apellido del autor
+                                por favor, seleccione un autor.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-2">
+                            <label for="genreId" class="form-label">Género: </label>
+                            <select class="form-select" id="genreId" name="genreId" required="">
+                                <option value="">Elija una opción...</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Por favor, seleccione un género
+                            </div>
+                        </div>
+
+                        <div class="col-6 mb-2">
+                            <label for="publicationYear" class="form-label">Año de publicación: </label>
+                            <input type="number" class="form-control" id="publicationYear" name="publicationYear" placeholder="1988" required="">
+                            <div class="invalid-feedback">
+                                Debe proveer un año de publicación
                             </div>
                         </div>
 
                         <div class="col-12 mb-2">
-                            <label for="bio" class="form-label">Biografía</label>
-                            <textarea class="form-control form-control" id="bio" placeholder="Una emocionante historia de vida" name="bio" rows="5" required=""></textarea>
+                            <label for="cover" class="form-label">Portada del libro: </label>
+                            <input type="file" class="form-control" id="cover" name="cover" placeholder="" required="">
                             <div class="invalid-feedback">
-                                No puede dejar la biografía vacía
+                                Debe enviar una portada
                             </div>
                         </div>
+
                     <button class="w-100 btn-primary btn-lg btn-brand px-3 py-2" type="submit">
                         Crear libro
                     </button>
@@ -91,7 +112,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
-    <script src="sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/book-form.js"></script>
 </body>
 
 </html>

@@ -1,10 +1,9 @@
 // @ts-check
 import { GenreModel } from "../models/Genre.js";
 
-
 /**
  * Instance del modelo `Author`
- * @typedef {InstanceType<typeof GenreModel>} GenreType 
+ * @typedef {InstanceType<typeof GenreModel>} GenreType
  */
 /**
  * Servicio que abstrae las operaciones con los datos del género
@@ -25,7 +24,7 @@ export class GenreService {
 
   /**
    * Retorna un arreglo de todos los géneros
-   * 
+   *
    * @returns {Promise<GenreType[]>}
    */
   async findAll() {
@@ -57,7 +56,7 @@ export class GenreService {
       return null;
     }
     const created = await this.genreModel.create({
-        description
+      description,
     });
 
     return created;
@@ -67,7 +66,7 @@ export class GenreService {
    * Actualiza el género especificado
    * con los atributos pasados.
    *
-   * @param {number} genreId 
+   * @param {number} genreId
    * @param {{
    *    description: string
    * }} genreData Los datos del género a crear
@@ -84,11 +83,10 @@ export class GenreService {
     return existingGenre;
   }
 
-
   /**
    * Elimina el género con el ID especificado
    *
-   * @param {number} genreId 
+   * @param {number} genreId
    * @returns {Promise<GenreType | null>} El género eliminado
    */
   async delete(genreId) {
@@ -102,46 +100,84 @@ export class GenreService {
 
   /**
    * Calcula la cantidad de libros por cada género
-   * 
+   *
    * @returns {Promise<(object & { bookCount: number })[]>}
    */
   async getBookCount() {
     return this.genreModel.aggregate([
       {
         $lookup: {
-          from: 'books',
-          foreignField: 'genreId',
-          localField: '_id',
-          as: 'books'
-        }
+          from: "books",
+          foreignField: "genreId",
+          localField: "_id",
+          as: "books",
+        },
       },
       {
         $project: {
           _id: 1,
           description: 1,
-          bookCount: { $size: "$books" }
-        }
-      }
+          bookCount: { $size: "$books" },
+        },
+      },
     ]);
   }
 
   /**
    * Retorna un arreglo de objetos con información del género
    * y los libros que pertenecen a él
-   * 
+   *
    * @returns {Promise<unknown[]>}
    */
   async getBooksByGenre() {
     return this.genreModel.aggregate([
       {
         $lookup: {
-          from: 'books',
-          localField: '_id',
-          foreignField: 'genreId',
-          as: 'books'
-        }
-      }
-    ])
+          from: "books",
+          let: {
+            genreId: "$_id",
+          },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $eq: ["$genreId", "$$genreId"],
+                },
+              },
+            },
+            {
+              $lookup: {
+                from: "authors",
+                localField: "authorId",
+                foreignField: "_id",
+                as: "author",
+              },
+            },
+            {
+              $lookup: {
+                from: "genres",
+                foreignField: "_id",
+                localField: "genreId",
+                as: "genre",
+              },
+            },
+            {
+              $addFields: {
+                authorId: { $arrayElemAt: ["$author", 0] },
+                genreId: { $arrayElemAt: ["$genre", 0] },
+              },
+            },
+            {
+              $project: {
+                author: 0,
+                genre: 0,
+              },
+            },
+          ],
+          as: "books",
+        },
+      },
+    ]);
   }
 }
 

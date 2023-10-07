@@ -12,7 +12,7 @@ export async function getAllGenres(_req, res) {
         }
 
         res.status(200).json({
-            books: found
+            genres: found
         });
 
     } catch(err) {

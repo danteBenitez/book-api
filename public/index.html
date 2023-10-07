@@ -54,7 +54,7 @@
                     class="d-flex mb-5 flex-column flex-md-row justify-content-center align-items-stretch justify-content-md-between  gap-3 flex-wrap">
                     <h2>Todos los libros</h2>
                     <div class="d-flex gap-3">
-                        <a class="btn add-book" href="/new-book.html">
+                        <a class="btn add-book" href="/book-form.html">
                             <i class="bi bi-plus"></i>
                             <span class="visually-hidden">Crear nuevo libro</span>
                         </a>
@@ -64,44 +64,14 @@
                                 <i class="bi bi-filter fs-4"></i>
                                 Filtrar
                             </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            <ul class="dropdown-menu" id="filter">
+                                <li><a class="dropdown-item" href="/">Todos</a></li>
+                                <li><a class="dropdown-item" href="/?filter=genre">Por géneros</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 book" id="book-container">
-                    <div class="col">
-                        <div class="card position-relative shadow-sm overflow-hidden">
-                            <div class="cover">
-                                <img src="/uploads/4ec542b23784073aedd3ba06bfc34e8a.jpg" class="object-fit-cover"
-                                    alt="">
-                            </div>
-                            <div class="card-body card-slide-up z-2">
-                                <div class="pb-4">
-                                    <h6 class="book-title">Book title</h6>
-                                    <span class="lead author-name">Benitez, Dante</span>
-                                    <div class="py-2"></div>
-                                    <span class="genre-name">Genre</span>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-brand d-flex align-items-center">
-                                            <i class="bi bi-pencil pe-1"></i>
-                                            Editar
-                                        </button>
-                                        <button type="button" class="btn btn-sm btn-brand d-flex align-items-center">
-                                            <i class="bi bi-trash pe-1"></i>
-                                            Borrar
-                                        </button>
-                                    </div>
-                                    <small class="text-body-secondary">1898</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </section>
         </article>
