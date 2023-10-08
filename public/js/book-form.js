@@ -103,8 +103,16 @@ async function fillOptions() {
           fetch('/api/genres')
         ])
 
-        if (!authorResponse.ok || !genreResponse.ok) {
-          throw response;
+        if (!genreResponse.ok) {
+          throw genreResponse;
+        }
+        
+        if (authorResponse.status === 404) {
+          throw {
+            message: 'No se encontraron autores. Cree uno primero y luego intente crear un libro suyo.'
+          }
+        } else if (!authorResponse.ok) {
+          throw authorResponse;
         }
 
         const { authors } = await authorResponse.json();
@@ -128,8 +136,8 @@ async function fillOptions() {
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: "Algo salió mal. Revise su conexión a Internet.",
-          footer: "Si el problema persiste, contáctese con los desarrolladores",
+          text: err.message ?? "Algo salió mal. Revise su conexión a Internet.",
+          footer: err.message ? '' : "Si el problema persiste, contáctese con los desarrolladores",
         });
       }
 }

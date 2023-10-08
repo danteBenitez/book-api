@@ -46,7 +46,14 @@ async function showBooks() {
     for (const genre of genres) {
       const sectionContainer = document.createElement('div');
 
-      sectionContainer.innerHTML += `<h2>${genre.description}</h2>`
+      sectionContainer.innerHTML += `
+        <hgroup class="w-100 d-flex justify-content-between align-items-center">
+          <h2>${genre.description}</h2>
+          <span class="ms-auto d-block fs-5 lead">
+            <i class="bi bi-book me-1"></i>
+            ${genre.books.length} libros
+          </span>
+        <hgroup>`
       sectionContainer.classList.add('genre-section');
 
       const bookListContainer = document.createElement('div');
