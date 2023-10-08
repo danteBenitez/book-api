@@ -22,10 +22,11 @@ const GENRES = [
 ];
 
 export async function createDefaultGenres() {
+  let i = 0;
   try {
     for (const genre of GENRES) {
-      console.log("Creando género: ", genre);
       await genreService.create({
+        _id: i++,
         description: genre,
       });
     }

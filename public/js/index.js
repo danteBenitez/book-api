@@ -1,4 +1,5 @@
 const bookContainer = document.querySelector("#book-container");
+console.log(bookContainer.children);
 const urlParams = new URLSearchParams(window.location.search);
 const filter = urlParams.get('filter');
 
@@ -43,6 +44,12 @@ async function showBooks() {
   // Si el filtro es 'genre' filtramos por género
   if (filter == 'genre') {
     const { genres } = await getBooksByFilter();
+
+    const childCount = bookContainer.children.length;
+    for (let i = 0; i < childCount; i++) {
+      bookContainer.removeChild(bookContainer.firstChild)
+    }
+
     for (const genre of genres) {
       const sectionContainer = document.createElement('div');
 
@@ -70,10 +77,10 @@ async function showBooks() {
 async function renderBookInfo(books, bookContainer) {
   console.log(books);
   if (books.length == 0) {
-    bookContainer.innerHTML += `<span class="lead fs-2 mx-auto text-center w-100">No hay libros que mostrar</span>`;
+    bookContainer.innerHTML = `<span class="lead fs-2 mx-auto text-center w-100">No hay libros que mostrar</span>`;
     return;
   }
-  bookContainer.innerHTML += books
+  bookContainer.innerHTML = books
     .map((book) => {
       return `<div class="col"><div class="card position-relative shadow-sm overflow-hidden"><div class="cover">
         <img src=/uploads/${book.coverImagePath} class="object-fit-cover"
@@ -123,8 +130,15 @@ async function deleteBook(evt) {
             icon: 'success',
             title: 'Libro eliminado correctamente',
         });
-        renderBookInfo();
+        showBooks();
     } else {
+      if (response.status == 404)  {
+        Swal.fire({
+          icon: 'error',
+          title: "No se encontró el libro"
+        })
+        return;
+      }
       const { errors } = await response.json();
 
       Swal.fire({

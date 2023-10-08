@@ -1,46 +1,43 @@
-# Ejemplo de autenticación y autorización basada en roles
+# API de libros, autores y géneros
+
+La presente aplicación expone una API que permite:
+- Realizar las cuatro operaciones básicas (Creación, Lectura, Eliminación y Modificación) de las siguientes entidades:
+    - Autores
+    - Libros
+- Listar los libros por género o simplemente obtener el conteo.
+
+La aplicación utiliza *MongoDB* como base de datos, y *mongoose* como librería para modelar los datos. 
+
+Se exponen, además, vistas HTML que permiten interactuar con la API con una interfaz gráfica.
 
 ## Requisitos del proyecto
 
-- Node.js, entorno de ejecución de JavaScript.
-- Un motor de datos compatible con Sequelize corriendo al momento de ejecutar el servidor. Puede ver los dialectos disponibles [aquí](https://sequelize.org/docs/v6/other-topics/dialect-specific-things/).
+- Entorno de ejecución: Node.js
+- Gestor de paquetes como npm o pnpm.
+- Servidor de base de datos de MongoDB, con mongod para el desarrollo local.
 
-## Instrucciones de instalación
+## Instalación
 
-1. Configure la emulación de variables de entorno creando un archivo .env en la carpeta raíz del proyecto, y siguiendo la pauta dada en .env.example.
+1. Para instalar el proyecto, comience por clonar el repositorio, con:
 
-```env
-PORT=        # El puerto de la aplicación
-
-DB_NAME=     # El nombre de la base de datos
-DB_PASSWORD= # La contraseña de la base de datos
-DB_USER=     # El nombre de usuario
-DB_HOST=     # El host 
-DB_PORT=     # El puerto de la base de datos
-
-SECRET=      # String secreto utilizado para firmar Json Web Tokens (JWT)
+```bash
+git clone https://github.com/danteBenitez/book-api.git
 ```
 
-2. Ejecute el siguiente comando:
+2. Dentro del directorio raíz del proyecto, ejecute:
 
 ```bash
 npm install
 ```
 
-Para instalar las dependencias del proyecto.
-
-3. Por último, ejecute 
+3. Cree un archivo llamado .env que contenga la siguiente información:
 
 ```bash
-npm run dev
+PORT=                 # El puerto en que escuchará el servidor
+DB_URI=               # La URI de conexión a un servidor de Mongo
 ```
 
-para iniciar el servidor en modo de desarrollo. Aquí la base de datos se sincronizará de modo automático con los modelos, borrando datos preexistentes.
+Recuerde tener corriendo alguna forma de servicio de base de datos a la hora de iniciar el servidor. La herramienta CLI [`mongod`](https://www.mongodb.com/docs/manual/reference/program/mongod/) permite ejecutar un servidor de base de datos Mongo de modo local.
 
-Por otro lado puede ejecutar el comando
+4. Inicie el servidor en modo desarrollo ejecutando:
 
-```bash
-npm start
-```
-
-para iniciar el servidor en entorno de producción. Esto no sincronizará los modelos ni sobreescribirá datos de la base de datos.

@@ -55,7 +55,8 @@
                     <div class="row g-3">
                         <div class="col-sm-6 mb-2">
                             <label for="title" class="form-label">Título: </label>
-                            <input type="text" class="form-control" id="title" name="title" placeholder="Una historia semi-interesante" required="">
+                            <input type="text" class="form-control" id="title" name="title"
+                                placeholder="Una historia semi-interesante" required="">
                             <div class="invalid-feedback">
                                 Todo libro debe tener un título
                             </div>
@@ -83,7 +84,8 @@
 
                         <div class="col-6 mb-2">
                             <label for="publicationYear" class="form-label">Año de publicación: </label>
-                            <input type="number" class="form-control" id="publicationYear" name="publicationYear" placeholder="1988" required="">
+                            <input type="number" class="form-control" id="publicationYear" name="publicationYear"
+                                placeholder="1988" required="">
                             <div class="invalid-feedback">
                                 Debe proveer un año de publicación
                             </div>
@@ -91,15 +93,29 @@
 
                         <div class="col-6 mb-2">
                             <label for="isbn" class="form-label">ISBN: </label>
-                            <input type="text" class="form-control" id="isbn" name="isbn" placeholder="978-0-9767736-6-5" required="">
+                            <input type="text" class="form-control" id="isbn" name="isbn"
+                                placeholder="978-0-9767736-6-5" required="">
                             <div class="invalid-feedback">
                                 Debe enviar un ISBN
                             </div>
                         </div>
 
                         <div class="col-6 mb-2">
-                            <label for="language" class="form-label">Elija el idioma del libro (opcional): </label>
-                            <input type="text" class="form-control" id="language" name="language" placeholder="Español">
+                            <label for="language" class="form-label">Elija el idioma del libro: </label>
+                            <select type="text" class="form-control" id="language" name="language"
+                                placeholder="Español">
+
+                                <option value="spanish">Español</option>
+                                <option value="english">Inglés</option>
+                                <option value="german">Alemán</option>
+                                <option value="french">Francés</option>
+                                <option value="italian">Italiano</option>
+                                <option value="portuguese">Portugués</option>
+                                <option value="dutch">Holandés</option>
+                                <option value="swedish">Sueco</option>
+                            </select>
+                            <option value=""></option>
+                            </select>
                         </div>
 
                         <div class="col-12 mb-2">
@@ -115,9 +131,9 @@
                             </div>
                         </div>
 
-                    <button class="w-100 btn-primary btn-lg btn-brand px-3 py-2" type="submit">
-                        Crear libro
-                    </button>
+                        <button class="w-100 btn-primary btn-lg btn-brand px-3 py-2" type="submit">
+                            Crear libro
+                        </button>
                 </form>
             </div>
 

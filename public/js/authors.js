@@ -76,8 +76,15 @@ async function deleteAuthor(evt) {
       });
       renderAuthors();
     } else {
-      const { errors } = await response.json();
+      if (response.status == 404)  {
+        Swal.fire({
+          icon: 'error',
+          title: "No se encontró el autor"
+        })
+        return;
+      }
 
+      const { errors } = await response.json();
       Swal.fire({
         icon: "error",
         title: "Error de validación",
