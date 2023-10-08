@@ -75,9 +75,11 @@ async function renderBookInfo(books, bookContainer) {
     <div class="card-body card-slide-up z-2">
         <div class="pb-4">
             <h6 class="book-title">${book.title}</h6>
-            <span class="lead author-name">${book.authorId.surname}, ${
-        book.authorId.name
-      }</span>
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="lead author-name">${book.authorId.surname}, ${
+                book.authorId.name}</span>
+              <span>${book.pageCount ? `${book.pageCount} páginas` : ''}</span>
+            </div>
             <div class="py-2"></div>
             <span class="genre-name">${
               book.genreId?.description ?? "Género desconocido"
@@ -94,7 +96,7 @@ async function renderBookInfo(books, bookContainer) {
                     Borrar
                 </button>
             </div>
-            <small class="text-body-secondary">1898</small>
+            <small class="text-body-secondary">${book.publicationYear}</small>
         </div>
     </div></div></div>`;
     })
@@ -104,7 +106,7 @@ async function renderBookInfo(books, bookContainer) {
 document.addEventListener("DOMContentLoaded", () => showBooks());
 
 async function deleteBook(evt) {
-    const id = evt.target.dataset.id;
+  const id = evt.target.dataset.id;
   try {
     const response = await fetch(`/api/books/${id}`, {
         method: 'DELETE'

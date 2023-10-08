@@ -19,6 +19,18 @@ const bookSchema = new Schema({
         type: String,
         required: true
     },
+    pageCount: {
+        type: Number,
+        required: true
+    },
+    language: {
+        type: String,
+        required: true
+    },
+    isbn: {
+        type: String,
+        required: true
+    },
     authorId: {
         type: Schema.Types.ObjectId,
         ref: 'Author',

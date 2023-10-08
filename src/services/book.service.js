@@ -70,12 +70,7 @@ export class BookService {
   /**
    * Crea un libro con los atributos especificados.
    *
-   * @param {{
-   *    title: string,
-   *    genre: number,
-   *    publicationYear: number,
-   *    authorId: number,
-   * }} bookData - Los datos del libro a crear
+   * @param {} bookData - Los datos del libro a crear
    * @param {import('express-fileupload').UploadedFile} cover
    * El archivo de la portada del libro
    * @returns {Promise<BookType | null>} El libro creado
@@ -117,12 +112,7 @@ export class BookService {
    * con los atributos pasados.
    *
    * @param {number} bookId
-   * @param {{
-   *    title: string,
-   *    genre: number,
-   *    publicationYear: number,
-   *    authorId: number,
-   * }} bookData Los datos del libro a crear
+   * @param {} bookData Los datos del libro a crear
    * @param {import('express-fileupload').UploadedFile} cover
    * El archivo de la portada del libro
    * @returns {Promise<BookType | null>} El libro actualizado
@@ -180,12 +170,6 @@ export class BookService {
     await existingBook.deleteOne();
     return existingBook;
   }
-
-  /**
-   * Función que agrupa los libros por su
-   * genreId. Retorna un arreglo de
-   * 
-   */
 }
 
 export const bookService = new BookService(BookModel, authorServiceInstance);

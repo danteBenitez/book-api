@@ -38,7 +38,7 @@ const commonSchemaOptions = {
             .notEmpty({
                 ignore_whitespace: true
             }).withMessage('La biografía no puede estar vacía')
-    ]
+    ],
 }
 
 export const createAuthorSchema = checkExact([
