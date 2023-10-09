@@ -11,11 +11,12 @@ import { validate } from "../middleware/validate.js";
 import { createBookSchema, updateBookSchema } from "../schema/book.schema.js";
 import {param} from '../middleware/validators.js';
 import { checkForFilenames } from "../middleware/validate-files.js";
+import { isImage } from "../utils/isImage.js";
 
 const router = Router();
 
 const idParam = param('bookId').isValidObjectId();
-const hasCover = checkForFilenames(['cover'], 'Debe enviar una portada de libro');
+const hasCover = checkForFilenames(['cover'], 'Debe enviar una imagen como portada del libro', isImage);
 
 router.get("/", getAllBooks);
 

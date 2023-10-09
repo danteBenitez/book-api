@@ -8,11 +8,14 @@
  * a chequear
  * @param {string} errorMessage El mensaje de error
  * a enviar de no encontrarse
+ * @param {(...files: import('express-fileupload').UploadedFile[]) => boolean} [validation]
+ * Una función que permite validar cada archivo. Recibe un array de archivos. Si retorna
+ * verdadero, el arreglo de considera válido se considera válido.
  * @returns {import('express').RequestHandler} Middleware
  * que valida la existencia de los archivos.
  * Responde con un error 400 de no encontrarse.
  */
-export function checkForFilenames(filenames, errorMessage) {
+export function checkForFilenames(filenames, errorMessage, validation) {
     return (req, res, next) => {
         try {
             if (!req.files) {
@@ -20,10 +23,13 @@ export function checkForFilenames(filenames, errorMessage) {
                     message: errorMessage
                 }
             }
+            const validateFn = validation ?? function() { return true; };
 
-            const files = Object.keys(req.files);
             for (const filename of filenames) {
-                if (filenames.includes(filename)) continue;
+                const file = req.files[filename][0] ?? req.files[filename];
+                if (filenames.includes(filename) && validateFn(file)) {
+                    continue;
+                };
                 throw {
                     message: errorMessage
                 }
