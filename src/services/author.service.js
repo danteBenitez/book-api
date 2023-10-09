@@ -1,7 +1,6 @@
 // @ts-check
 import { AuthorModel } from "../models/Author.js";
-
-
+import { BookModel } from '../models/Book.js';
 /**
  * Instance del modelo `Author`
  * @typedef {InstanceType<typeof AuthorModel>} AuthorType 
@@ -13,14 +12,19 @@ import { AuthorModel } from "../models/Author.js";
 export class AuthorService {
   /** @type {typeof AuthorModel} */
   authorModel;
+  /** @type {typeof BookModel} */
+  bookModel;
 
   /**
    * Constructor de la clase. Debe inyectarse un modelo
-   * acorde a la interfaz especificada por {@link AuthorModel}
+   * acorde a la interfaz especificada por {@link AuthorModel},
+   * y otro especificado por {@link BookModel}
    * @param {typeof AuthorModel} authorModel
+   * @param {typeof BookModel} bookModel 
    */
-  constructor(authorModel) {
+  constructor(authorModel, bookModel) {
     this.authorModel = authorModel;
+    this.bookModel = bookModel;
   }
   /**
    * Retorna un arreglo de todos los autores
@@ -122,6 +126,11 @@ export class AuthorService {
     if (!existingAuthor) {
       return null;
     }
+    // Eliminar todos los libros de un autor
+    // al eliminarse este
+    await this.bookModel.deleteMany({
+      authorId: existingAuthor._id
+    });
     await existingAuthor.deleteOne();
     return existingAuthor;
   }
@@ -135,7 +144,6 @@ export class AuthorService {
    * @returns {Promise<AuthorType>} El autor actualizado
    */
   async addBookIdToAuthor(author, bookObjectId) {
-    console.log("Adding ID to author");
     author.books.push(bookObjectId);
     await author.save();
     return author;
@@ -157,4 +165,4 @@ export class AuthorService {
   }
 }
 
-export const authorService = new AuthorService(AuthorModel);
+export const authorService = new AuthorService(AuthorModel, BookModel);

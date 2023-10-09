@@ -8,13 +8,26 @@ const bookSchema = new Schema({
     },
     genreId: {
         type: Schema.Types.ObjectId,
-        ref: 'Genre'
+        ref: 'Genre',
+        autopopulate: true
     },
     publicationYear: {
         type: Number,
         required: true
     },
     coverImagePath: {
+        type: String,
+        required: true
+    },
+    pageCount: {
+        type: Number,
+        required: true
+    },
+    language: {
+        type: String,
+        required: true
+    },
+    isbn: {
         type: String,
         required: true
     },

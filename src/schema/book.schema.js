@@ -53,6 +53,29 @@ const commonSchemaOptions = {
       .custom(checkExistingAuthor)
       .withMessage("No se encontró al autor del libro"),
   ],
+  validateISBN: [
+    body("isbn")
+      .exists()
+      .withMessage("Un libro debe tener un ISBN")
+      .isString().withMessage("El ISBN debe ser un string")
+      .isISBN({
+        version: "13"
+      }).withMessage("Debe proveer un ISBN válido")
+  ],
+  validateLanguage: [
+    body("language")
+      .optional()
+      .isString()
+      .withMessage("El idioma del libro debe ser un string")
+      .notEmpty().withMessage("El idioma no puede estar vacío")
+  ],
+  validatePageCount: [
+    body("pageCount")
+      .optional()
+      .isNumeric().withMessage("El conteo de páginas debe ser un número")
+      .isInt().withMessage("El conteo de páginas debe ser un número entero")
+      .toInt()
+  ]
 };
 
 export const createBookSchema = checkExact(
@@ -61,6 +84,9 @@ export const createBookSchema = checkExact(
     ...commonSchemaOptions.validatePublicationYear,
     ...commonSchemaOptions.validateGenreId,
     ...commonSchemaOptions.validateAuthorId,
+    ...commonSchemaOptions.validateLanguage,
+    ...commonSchemaOptions.validateISBN,
+    ...commonSchemaOptions.validatePageCount
   ],
   {
     message:
@@ -74,6 +100,9 @@ export const updateBookSchema = checkExact(
     ...commonSchemaOptions.validatePublicationYear,
     ...commonSchemaOptions.validateGenreId,
     ...commonSchemaOptions.validateAuthorId,
+    ...commonSchemaOptions.validateLanguage,
+    ...commonSchemaOptions.validateISBN,
+    ...commonSchemaOptions.validatePageCount
   ],
   {
     message:

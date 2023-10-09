@@ -2,6 +2,7 @@ import path from "path";
 import { BookModel } from "../models/Book.js";
 import { authorService as authorServiceInstance } from "./author.service.js";
 import { rm } from "fs/promises";
+import mongoose from "mongoose";
 
 const UPLOAD_PATH = path.resolve("./uploads");
 
@@ -69,12 +70,7 @@ export class BookService {
   /**
    * Crea un libro con los atributos especificados.
    *
-   * @param {{
-   *    title: string,
-   *    genre: number,
-   *    publicationYear: number,
-   *    authorId: number,
-   * }} bookData - Los datos del libro a crear
+   * @param {} bookData - Los datos del libro a crear
    * @param {import('express-fileupload').UploadedFile} cover
    * El archivo de la portada del libro
    * @returns {Promise<BookType | null>} El libro creado
@@ -86,19 +82,23 @@ export class BookService {
       return null;
     }
 
+    const objectId = new mongoose.Types.ObjectId()
+
     /** @type {Promise<BookType | null>} */
-    const bookPromise = new Promise((resolve) => {
-      cover.mv(path.join(UPLOAD_PATH, cover.name), async (err) => {
+    const bookPromise = new Promise(async (resolve) => {
+      const created = await this.bookModel.create({
+        _id: objectId,
+        authorId,
+        coverImagePath: `${objectId}-${cover.name}`,
+        ...book,
+      });
+
+      cover.mv(path.join(UPLOAD_PATH, `${created.coverImagePath}`), async (err) => {
           if (err)  {
             console.error("Ocurrió un error al subir el archivo: ", err);
             resolve(null);
           }
 
-        const created = await this.bookModel.create({
-          authorId,
-          coverImagePath: cover.name,
-          ...book,
-        });
         const newAuthor = await this.authorService.addBookIdToAuthor(author, created);
         created.authorId = newAuthor;
         resolve(created);
@@ -112,12 +112,7 @@ export class BookService {
    * con los atributos pasados.
    *
    * @param {number} bookId
-   * @param {{
-   *    title: string,
-   *    genre: number,
-   *    publicationYear: number,
-   *    authorId: number,
-   * }} bookData Los datos del libro a crear
+   * @param {} bookData Los datos del libro a crear
    * @param {import('express-fileupload').UploadedFile} cover
    * El archivo de la portada del libro
    * @returns {Promise<BookType | null>} El libro actualizado
@@ -129,10 +124,10 @@ export class BookService {
     if (!existingBook) {
       return null;
     }
-    await rm(path.join(UPLOAD_PATH, existingBook.coverImagePath));
+    await rm(path.join(UPLOAD_PATH, `${existingBook.coverImagePath}`));
     /** @type {Promise<BookType | null>} */
     const updatePromise = new Promise((resolve) => {
-      cover.mv(path.join(UPLOAD_PATH, cover.name), async (err) => {
+      cover.mv(path.join(UPLOAD_PATH, `${bookId}-${cover.name}`), async (err) => {
           if (err)  {
             console.error("Ocurrió un error al subir el archivo: ", err);
             resolve(null);
@@ -140,7 +135,7 @@ export class BookService {
 
           existingBook = Object.assign(existingBook, { 
             ...bookData,
-            coverImagePath: cover.name
+            coverImagePath: `${bookId}-${cover.name}`
           });
           await existingBook.save();
 
@@ -175,7 +170,6 @@ export class BookService {
     await existingBook.deleteOne();
     return existingBook;
   }
-
 }
 
 export const bookService = new BookService(BookModel, authorServiceInstance);

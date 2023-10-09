@@ -12,7 +12,7 @@ export async function getAllGenres(_req, res) {
         }
 
         res.status(200).json({
-            books: found
+            genres: found
         });
 
     } catch(err) {
@@ -101,23 +101,43 @@ export async function deleteGenre(req, res) {
         })
 
     } catch(err) {
-        res.sendstatus(500);
+        res.sendStatus(500);
     }
 }
 
-export async function getBookCountByGenre(_req, res) {
+export async function getBookCount(_req, res) {
     try {
         const found = await genreService.getBookCount();
 
         if (found.length == 0) {
             return res.status(404).json({
-                message: 'No se encontraron géneros'
+                message: 'Ningún genero encontrado'
+            })
+        }
+
+        res.status(200).json({
+            genre: found
+        });
+
+    } catch(err) {
+        console.error(err);
+        res.sendStatus(500);
+    }
+}
+
+export async function getBooksByGenre(_req, res) {
+    try {
+        const found = await genreService.getBooksByGenre();
+
+        if (found.length == 0) {
+            return res.status(404).json({
+                message: 'Géneros no encontrados'
             })
         }
 
         res.status(200).json({
             genres: found
-        })
+        });
 
     } catch(err) {
         console.error(err);

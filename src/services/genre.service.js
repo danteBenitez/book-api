@@ -99,28 +99,85 @@ export class GenreService {
   }
 
   /**
-   * Retorna la cantidad de libros por género
-   * @returns {Promise<any[]>}
+   * Calcula la cantidad de libros por cada género
+   *
+   * @returns {Promise<(object & { bookCount: number })[]>}
    */
   async getBookCount() {
-    const result = await this.genreModel.aggregate([
+    return this.genreModel.aggregate([
       {
         $lookup: {
           from: "books",
-          localField: "_id",
           foreignField: "genreId",
+          localField: "_id",
           as: "books",
         },
       },
       {
         $project: {
           _id: 1,
-          bookCount: { $size: "$books" },
           description: 1,
+          bookCount: { $size: "$books" },
         },
       },
     ]);
-    return result;
+  }
+
+  /**
+   * Retorna un arreglo de objetos con información del género
+   * y los libros que pertenecen a él
+   *
+   * @returns {Promise<unknown[]>}
+   */
+  async getBooksByGenre() {
+    return this.genreModel.aggregate([
+      {
+        $lookup: {
+          from: "books",
+          let: {
+            genreId: "$_id",
+          },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $eq: ["$genreId", "$$genreId"],
+                },
+              },
+            },
+            {
+              $lookup: {
+                from: "authors",
+                localField: "authorId",
+                foreignField: "_id",
+                as: "author",
+              },
+            },
+            {
+              $lookup: {
+                from: "genres",
+                foreignField: "_id",
+                localField: "genreId",
+                as: "genre",
+              },
+            },
+            {
+              $addFields: {
+                authorId: { $arrayElemAt: ["$author", 0] },
+                genreId: { $arrayElemAt: ["$genre", 0] },
+              },
+            },
+            {
+              $project: {
+                author: 0,
+                genre: 0,
+              },
+            },
+          ],
+          as: "books",
+        },
+      },
+    ]);
   }
 }
 
