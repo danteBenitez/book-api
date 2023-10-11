@@ -21,11 +21,11 @@ const bookSchema = new Schema({
     },
     pageCount: {
         type: Number,
-        required: true
+        required: false
     },
     language: {
         type: String,
-        required: true
+        required: false
     },
     isbn: {
         type: String,
